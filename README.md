@@ -1,2 +1,6 @@
-# SLM-Phi-3-MLFlow
-Converting Phi-3 model into MLFlow format, to enable ML lifecycle management.
+# Building a wrapper and using Phi-3 as an MLFlow model
+
+MLflow is an open-source platform designed to streamline the entire machine learning (ML) lifecycle. It helps data scientists track experiments, manage their ML models and deploy them into production, ensuring reproducibility and efficient collaboration.
+
+In this repo, I'll show 2 different approaches on build a wrapper around Phi-3 small langauge model (SLM), and then running it as an MLFlow model either locally or in a cloud, e.g. in Azure Machine Learning workspace.
+
