@@ -36,7 +36,7 @@ model_info = mlflow.transformers.log_model(
 
 ## Option 2: Custom Python wrapper
 At the time of writing, the transformer pipeline did not support MLFlow wrapper generation for HuggingFace models in ONNX format, even with the experimental _optimum_ Python package. For the cases like this, you can build your custom Python wrapper for MLFlow model.
-1. I'll utilise here Microsoft's [ONNX Runtime generate() API](https://github.com/microsoft/onnxruntime-genai) for the ONNX model's inference, and tokens encoding / decoding. You have to choose _onnxruntime_genai_ package for your target compute, with the below example targeting CPU:
+1. I'll utilise here Microsoft's [ONNX Runtime generate() API](https://github.com/microsoft/onnxruntime-genai) for the ONNX model's inference and tokens encoding / decoding. You have to choose _onnxruntime_genai_ package for your target compute, with the below example targeting CPU:
 ``` Python
 import mlflow
 from mlflow.models import infer_signature
@@ -142,5 +142,5 @@ loaded_model = mlflow.pyfunc.load_model(
 ![phi3_mlflow_registration](/images/phi3_aml_registry.png)
 3. Then, deploy it to a managed real-time endpoint:
 ![phi3_mlflow_deploy](/images/phi3_aml_deploy.png)
-4.Once the deployment succeeds, you can immediately start using it with code samples provided in **JavaScript**, **Python**, **C#** or **R**:
+4. Once the deployment succeeds, you can immediately start using it with code samples provided in **JavaScript**, **Python**, **C#** or **R**:
 ![phi3_mlflow_endpoint](/images/phi3_aml_endpoint.png)
