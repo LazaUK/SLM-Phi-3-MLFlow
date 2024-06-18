@@ -5,10 +5,10 @@ MLflow is an open-source platform designed to streamline the entire machine lear
 In this repo, I'll demonstrate 2 different approaches to building a wrapper around Phi-3 small language model (SLM) and then running it as an MLFlow model either locally or in a cloud, e.g. in Azure Machine Learning workspace. You can use attached Jupyter notebooks to jump-start your development process.
 
 ## Table of contents:
-- [Option 1: Transformer pipeline](https://github.com/LazaUK/SLM-Phi-3-MLFlow#option-1-transformer-pipeline)
-- [Option 2: Custom Python wrapper](https://github.com/LazaUK/SLM-Phi-3-MLFlow#option-2-custom-python-wrapper)
-- [Signatures of generated MLFlow models](https://github.com/LazaUK/SLM-Phi-3-MLFlow#signatures-of-generated-mlflow-models)
-- [Inference of Phi-3 with MLFlow runtime]()
+- [Option 1: Transformer pipeline](https://github.com/LazaUK/SLM-Phi-3-MLFlow/tree/main#option-1-transformer-pipeline)
+- [Option 2: Custom Python wrapper](https://github.com/LazaUK/SLM-Phi-3-MLFlow/tree/main#option-2-custom-python-wrapper)
+- [Signatures of generated MLFlow models](https://github.com/LazaUK/SLM-Phi-3-MLFlow/tree/main#signatures-of-generated-mlflow-models)
+- [Inference of Phi-3 with MLFlow runtime](https://github.com/LazaUK/SLM-Phi-3-MLFlow/tree/main#inference-of-phi-3-with-mlflow-runtime)
 
 ## Option 1: Transformer pipeline
 This is the easiest option to build a wrapper, if you want to use a HuggingFace model with the MLFlow's _experimental_ **transformers** flavour.
