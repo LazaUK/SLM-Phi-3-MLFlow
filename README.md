@@ -24,7 +24,7 @@ pipeline = transformers.pipeline(
     model = "microsoft/Phi-3-mini-4k-instruct"
 )
 ```
-3. You can now save your Phi-3 model’s transformer pipeline into MLFlow format and provide additional details such as the target artifacts path, specific model configuration settings (model_config), and inference API type:
+3. You can now save your Phi-3 model’s transformer pipeline into MLFlow format and provide additional details such as the target artifacts path, specific model configuration settings and inference API type:
 ``` Python
 model_info = mlflow.transformers.log_model(
     transformers_model = pipeline,
@@ -35,14 +35,14 @@ model_info = mlflow.transformers.log_model(
 ```
 
 ## Option 2: Custom Python wrapper
-At the time of writing, transformer pipeline didn't support MLFlow wrapper generation for the HuggingFace models in ONNX format, even with the experimental _optimum_ Python package. For the cases like this, you can build your custom Python wrapper for MLFlow model.
-1. I'l utilise here the Microsoft's [ONNX Runtime generate() API](https://github.com/microsoft/onnxruntime-genai) for the ONNX model's inference, and tokens encoding / decoding. You have to choose onnxruntime_genai package for your target compute, with below example targetting CPU.
+At the time of writing, the transformer pipeline did not support MLFlow wrapper generation for HuggingFace models in ONNX format, even with the experimental _optimum_ Python package. For the cases like this, you can build your custom Python wrapper for MLFlow model.
+1. I'll utilise here Microsoft's [ONNX Runtime generate() API](https://github.com/microsoft/onnxruntime-genai) for the ONNX model's inference, and tokens encoding / decoding. You have to choose _onnxruntime_genai_ package for your target compute, with the below example targeting CPU:
 ``` Python
 import mlflow
 from mlflow.models import infer_signature
 import onnxruntime_genai as og
 ```
-2. Our custom class implements two methods: _load_context()_ to initialise the **ONNX model** of Phi-3 Mini 4K Instruct, **generator parameters** and **tokenizer**, and _predict()_ to generate output tokens for the provided prompt.
+2. Our custom class implements two methods: _load_context()_ to initialise the **ONNX model** of Phi-3 Mini 4K Instruct, **generator parameters** and **tokenizer**; and _predict()_ to generate output tokens for the provided prompt:
 ``` Python
 class Phi3Model(mlflow.pyfunc.PythonModel):
     def load_context(self, context):
@@ -71,7 +71,7 @@ class Phi3Model(mlflow.pyfunc.PythonModel):
 
         return self.tokenizer.decode(response[0][len(self.params.input_ids):])
 ```
-3. The last step is to generate custom Python wrapper (in a pickle format) along with the original Phi-3 ONNX model and required dependencies.
+3. The last step is to generate a custom Python wrapper (in pickle format) for the Phi-3 model, along with the original ONNX model and required dependencies:
 ``` Python
 model_info = mlflow.pyfunc.log_model(
     artifact_path = artifact_path,
