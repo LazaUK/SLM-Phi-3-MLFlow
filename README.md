@@ -138,6 +138,8 @@ loaded_model = mlflow.pyfunc.load_model(
     model_uri = model_info.model_uri
 )
 ```
-2. To run in a cloud environment like Azure Machine Learning workspace, you can register your MLFlow model in workspace's model registry.
+2. To run in a cloud environment like Azure Machine Learning workspace, you can register your MLFlow model with a custom Python wrapper in workspace's model registry.
 ![phi3_mlflow_registration](/images/phi3_aml_registry.png)
-3. 
+3. Then, deploy it to a managed real-time endpoint.
+![phi3_mlflow_deploy](/images/phi3_aml_deploy.png)
+4. 
