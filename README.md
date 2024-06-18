@@ -7,10 +7,13 @@ In this repo, I'll show 2 different approaches on building a wrapper around Phi-
 ## Table of contents:
 - [Option 1: Transformer pipeline]()
 - [Option 2: Custom Python wrapper]()
+- [MLFlow model's signatures]()
 - [Inference of Phi-3 on MLFlow runtime]()
 
 ## Option 1: Transformer pipeline
 
 ## Option 2: Custom Python wrapper
+
+## MLFlow model's signatures
 
 ## Inference of Phi-3 on MLFlow runtime
