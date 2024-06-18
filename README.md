@@ -2,7 +2,7 @@
 
 MLflow is an open-source platform designed to streamline the entire machine learning (ML) lifecycle. It helps data scientists track experiments, manage their ML models and deploy them into production, ensuring reproducibility and efficient collaboration.
 
-In this repo, I'll demonstrate 2 different approaches to building a wrapper around Phi-3 small language model (SLM), and then running it as an MLFlow model either locally or in a cloud, e.g. in Azure Machine Learning workspace. You can also use attached Jupyter notebooks to jump-start your development process.
+In this repo, I'll demonstrate 2 different approaches to building a wrapper around Phi-3 small language model (SLM) and then running it as an MLFlow model either locally or in a cloud, e.g. in Azure Machine Learning workspace. You can use attached Jupyter notebooks to jump-start your development process.
 
 ## Table of contents:
 - [Option 1: Transformer pipeline](https://github.com/LazaUK/SLM-Phi-3-MLFlow#option-1-transformer-pipeline)
@@ -11,20 +11,20 @@ In this repo, I'll demonstrate 2 different approaches to building a wrapper arou
 - [Inference of Phi-3 with MLFlow runtime]()
 
 ## Option 1: Transformer pipeline
-This is the easiest option, if you want to use HuggingFace model with MLFlow's _experimental_ **transformers** flavour.
+This is the easiest option to build a wrapper, if you want to use a HuggingFace model with the MLFlow's _experimental_ **transformers** flavour.
 1. You would require relevant Python packages from MLFlow and HuggingFace.
 ``` Python
 import mlflow
 import transformers
 ```
-2. You can initiate then a transformer pipeline, by referring to a target Phi-3 model in the HuggingFace registry. As can be verified from the _Phi-3-mini-4k-instruct_'s model card, its task is of a "Text Generation" type.
+2. Next, you should initiate a transformer pipeline, by referring target Phi-3 model in the HuggingFace registry. As can be seen from the _Phi-3-mini-4k-instruct_'s model card, its task is of a "Text Generation" type.
 ``` Python
 pipeline = transformers.pipeline(
     task = "text-generation",
     model = "microsoft/Phi-3-mini-4k-instruct"
 )
 ```
-3. You can now save your Phi-3 model from a transformer pipeline into MLFlow format, and provide additional details such as the target artifacts path, model configuration settings and inference API type.
+3. You can now save your Phi-3 model's transformer pipeline into MLFlow format, and provide additional details such as the target artifacts path, model configuration settings and inference API type.
 ``` Python
 model_info = mlflow.transformers.log_model(
     transformers_model = pipeline,
@@ -35,6 +35,14 @@ model_info = mlflow.transformers.log_model(
 ```
 
 ## Option 2: Custom Python wrapper
+1. At the time of writing, transformer pipeline didn't support MLFlow wrapper generation for the HuggingFace models in ONNX format, even with the experimental _optimum_ Python package. As a workaround, you can build your custom Python wrapper for MLFlow model.
+2. To build a wrapper, I'l utilise Microsoft's [ONNX Runtime generate() API](https://github.com/microsoft/onnxruntime-genai) for the original ONNX model's inference, and input / output tokens encoding / decoding. You would require onnxruntime_genai Python package for your target compute along with the MLFlow Python packages.
+``` Python
+import mlflow
+from mlflow.models import infer_signature
+import onnxruntime_genai as og
+```
+3. 
 
 ## Signatures of generated MLFlow models
 1. In the Step 3 of the Option 1 above, we have set the MLFlow's model task to "_llm/v1/chat_". Such instruction generates model's API wrapper, compatible with OpenAI's Chat API as shown below. 
