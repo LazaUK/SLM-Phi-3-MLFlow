@@ -86,7 +86,7 @@ model_info = mlflow.pyfunc.log_model(
 ```
 
 ## Signatures of generated MLFlow models
-1. In the Step 3 of the Option 1 above, we have set the MLFlow's model task to "_llm/v1/chat_". Such instruction generates model's API wrapper, compatible with OpenAI's Chat API as shown below. 
+1. In Step 3 of Option 1 above, we set the MLFlow model’s task to “_llm/v1/chat_”. Such instruction generates a model’s API wrapper, compatible with OpenAI’s Chat API as shown below:
 ``` Python
 {inputs: 
   ['messages': Array({content: string (required), name: string (optional), role: string (required)}) (required), 'temperature': double (optional), 'max_tokens': long (optional), 'stop': Array(string) (optional), 'n': long (optional), 'stream': boolean (optional)],
@@ -95,11 +95,11 @@ outputs:
 params: 
   None}
 ```
-2. As a result, you can submit your prompt in the following format.
+2. As a result, you can submit your prompt in the following format:
 ``` Python
 messages = [{"role": "user", "content": "What is the capital of Spain?"}]
 ```
-3. Then use OpenAI API-compatible post-processing, e.g. _response[0]['choices'][0]['message']['content']_ to beautify your output to something like this.
+3. Then, use OpenAI API-compatible post-processing, e.g., _response[0][‘choices’][0][‘message’][‘content’]_, to beautify your output to something like this:
 ``` JSON
 Question: What is the capital of Spain?
 
@@ -107,7 +107,7 @@ Answer: The capital of Spain is Madrid. It is the largest city in Spain and serv
 
 Usage: {'prompt_tokens': 11, 'completion_tokens': 73, 'total_tokens': 84}
 ```
-4. In the Step 3 of the Option 2 above, we let MLFlow package to generate model's signature from a given input example. Our MLFlow wrapper's signature will look like this.
+4.  In Step 3 of Option 2 above, we allow the MLFlow package to generate the model’s signature from a given input example. Our MLFlow wrapper's signature will look like this:
 ``` Python
 {inputs: 
   ['prompt': string (required)],
@@ -116,7 +116,7 @@ outputs:
 params: 
   None}
 ```
-5. So, our prompt would need to contain "prompt" dictionary key, similar to this.
+5. So, our prompt would need to contain "prompt" dictionary key, similar to this:
 ``` Python
 {"prompt": "<|system|>You are a stand-up comedian.<|end|><|user|>Tell me a joke about atom<|end|><|assistant|>",}
 ```
