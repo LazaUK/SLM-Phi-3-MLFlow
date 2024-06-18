@@ -35,14 +35,55 @@ model_info = mlflow.transformers.log_model(
 ```
 
 ## Option 2: Custom Python wrapper
-1. At the time of writing, transformer pipeline didn't support MLFlow wrapper generation for the HuggingFace models in ONNX format, even with the experimental _optimum_ Python package. As a workaround, you can build your custom Python wrapper for MLFlow model.
-2. To build a wrapper, I'l utilise Microsoft's [ONNX Runtime generate() API](https://github.com/microsoft/onnxruntime-genai) for the original ONNX model's inference, and input / output tokens encoding / decoding. You would require onnxruntime_genai Python package for your target compute along with the MLFlow Python packages.
+At the time of writing, transformer pipeline didn't support MLFlow wrapper generation for the HuggingFace models in ONNX format, even with the experimental _optimum_ Python package. For the cases like this, you can build your custom Python wrapper for MLFlow model.
+1. I'l utilise here the Microsoft's [ONNX Runtime generate() API](https://github.com/microsoft/onnxruntime-genai) for the ONNX model's inference, and tokens encoding / decoding. You have to choose onnxruntime_genai package for your target compute, with below example targetting CPU.
 ``` Python
 import mlflow
 from mlflow.models import infer_signature
 import onnxruntime_genai as og
 ```
-3. 
+2. Our custom class implements two methods: _load_context()_ to initialise the **ONNX model** of Phi-3 Mini 4K Instruct, **generator parameters** and **tokenizer**, and _predict()_ to generate output tokens for the provided prompt.
+``` Python
+class Phi3Model(mlflow.pyfunc.PythonModel):
+    def load_context(self, context):
+        # Retrieving model from the artifacts
+        model_path = context.artifacts["phi3-mini-onnx"]
+        model_options = {
+             "max_length": 300,
+             "temperature": 0.2,         
+        }
+    
+        # Defining the model
+        self.phi3_model = og.Model(model_path)
+        self.params = og.GeneratorParams(self.phi3_model)
+        self.params.set_search_options(**model_options)
+        
+        # Defining the tokenizer
+        self.tokenizer = og.Tokenizer(self.phi3_model)
+
+    def predict(self, context, model_input):
+        # Retrieving prompt from the input
+        prompt = model_input["prompt"][0]
+        self.params.input_ids = self.tokenizer.encode(prompt)
+
+        # Generating the model's response
+        response = self.phi3_model.generate(self.params)
+
+        return self.tokenizer.decode(response[0][len(self.params.input_ids):])
+```
+3. The last step is to generate custom Python wrapper (in a pickle format) along with the original Phi-3 ONNX model and required dependencies.
+``` Python
+model_info = mlflow.pyfunc.log_model(
+    artifact_path = artifact_path,
+    python_model = Phi3Model(),
+    artifacts = {
+        "phi3-mini-onnx": "cpu_and_mobile/cpu-int4-rtn-block-32-acc-level-4",
+    },
+    input_example = input_example,
+    signature = infer_signature(input_example, ["Run"]),
+    extra_pip_requirements = ["torch", "onnxruntime_genai", "numpy"],
+)
+```
 
 ## Signatures of generated MLFlow models
 1. In the Step 3 of the Option 1 above, we have set the MLFlow's model task to "_llm/v1/chat_". Such instruction generates model's API wrapper, compatible with OpenAI's Chat API as shown below. 
@@ -65,6 +106,29 @@ Question: What is the capital of Spain?
 Answer: The capital of Spain is Madrid. It is the largest city in Spain and serves as the political, economic, and cultural center of the country. Madrid is located in the center of the Iberian Peninsula and is known for its rich history, art, and architecture, including the Royal Palace, the Prado Museum, and the Plaza Mayor.
 
 Usage: {'prompt_tokens': 11, 'completion_tokens': 73, 'total_tokens': 84}
+```
+4. In the Step 3 of the Option 2 above, we let MLFlow package to generate model's signature from a given input example. Our MLFlow wrapper's signature will look like this.
+``` Python
+{inputs: 
+  ['prompt': string (required)],
+outputs: 
+  [string (required)],
+params: 
+  None}
+```
+5. So, our prompt would need to contain "prompt" dictionary key, similar to this.
+``` Python
+{"prompt": "<|system|>You are a stand-up comedian.<|end|><|user|>Tell me a joke about atom<|end|><|assistant|>",}
+```
+6. The model's output will be provided then in string format.
+``` JSON
+Alright, here's a little atom-related joke for you!
+
+Why don't electrons ever play hide and seek with protons?
+
+Because good luck finding them when they're always "sharing" their electrons!
+
+Remember, this is all in good fun, and we're just having a little atomic-level humor!
 ```
 
 ## Inference of Phi-3 with MLFlow runtime
