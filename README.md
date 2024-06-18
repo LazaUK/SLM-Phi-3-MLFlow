@@ -5,9 +5,9 @@ MLflow is an open-source platform designed to streamline the entire machine lear
 In this repo, I'll demonstrate 2 different approaches to building a wrapper around Phi-3 small language model (SLM), and then running it as an MLFlow model either locally or in a cloud, e.g. in Azure Machine Learning workspace.
 
 ## Table of contents:
-- [Option 1: Transformer pipeline](https://github.com/LazaUK/SLM-Phi-3-MLFlow#option-1-transformer-pipeline)
-- [Option 2: Custom Python wrapper](https://github.com/LazaUK/SLM-Phi-3-MLFlow#option-2-custom-python-wrapper)
-- [Signatures of generated MLFlow models]()
+- [Option 1: Transformer pipeline](https://github.com/LazaUK/SLM-Phi-3-MLFlow?tab=readme-ov-file#option-1-transformer-pipeline)
+- [Option 2: Custom Python wrapper](https://github.com/LazaUK/SLM-Phi-3-MLFlow?tab=readme-ov-file#option-2-custom-python-wrapper)
+- [Signatures of generated MLFlow models](https://github.com/LazaUK/SLM-Phi-3-MLFlow?tab=readme-ov-file#signatures-of-generated-mlflow-models)
 - [Inference of Phi-3 with MLFlow runtime]()
 
 ## Option 1: Transformer pipeline
@@ -39,14 +39,12 @@ model_info = mlflow.transformers.log_model(
 ## Signatures of generated MLFlow models
 1. In the Step 3 of the Option 1 above, we have set the MLFlow's model task to "_llm/v1/chat_". Such instruction generates model's API wrapper, compatible with OpenAI's Chat API as shown below. 
 ``` Python
-{
-inputs: 
+{inputs: 
   ['messages': Array({content: string (required), name: string (optional), role: string (required)}) (required), 'temperature': double (optional), 'max_tokens': long (optional), 'stop': Array(string) (optional), 'n': long (optional), 'stream': boolean (optional)],
 outputs: 
   ['id': string (required), 'object': string (required), 'created': long (required), 'model': string (required), 'choices': Array({finish_reason: string (required), index: long (required), message: {content: string (required), name: string (optional), role: string (required)} (required)}) (required), 'usage': {completion_tokens: long (required), prompt_tokens: long (required), total_tokens: long (required)} (required)],
 params: 
-  None
-}
+  None}
 ```
 2. As a result, you can submit your prompt in the following format.
 ``` Python
@@ -56,7 +54,7 @@ messages = [{"role": "user", "content": "What is the capital of Spain?"}]
 ``` JSON
 Question: What is the capital of Spain?
 
-Response: The capital of Spain is Madrid. It is the largest city in Spain and serves as the political, economic, and cultural center of the country. Madrid is located in the center of the Iberian Peninsula and is known for its rich history, art, and architecture, including the Royal Palace, the Prado Museum, and the Plaza Mayor.
+Answer: The capital of Spain is Madrid. It is the largest city in Spain and serves as the political, economic, and cultural center of the country. Madrid is located in the center of the Iberian Peninsula and is known for its rich history, art, and architecture, including the Royal Palace, the Prado Museum, and the Plaza Mayor.
 
 Usage: {'prompt_tokens': 11, 'completion_tokens': 73, 'total_tokens': 84}
 ```
