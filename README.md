@@ -39,7 +39,7 @@ model_info = mlflow.transformers.log_model(
 ## Signatures of generated MLFlow models
 1. In the Step 3 of the Option 1 above, we have set the MLFlow's model task to "_llm/v1/chat_". This instruction generates an API wrapper, compatible with OpenAI's Chat API.
 2. 
-``` JSON
+``` Python
 {
 inputs: 
   ['messages': Array({content: string (required), name: string (optional), role: string (required)}) (required), 'temperature': double (optional), 'max_tokens': long (optional), 'stop': Array(string) (optional), 'n': long (optional), 'stream': boolean (optional)],
