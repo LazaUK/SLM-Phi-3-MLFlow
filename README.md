@@ -132,3 +132,12 @@ Remember, this is all in good fun, and we're just having a little atomic-level h
 ```
 
 ## Inference of Phi-3 with MLFlow runtime
+1. To run generated MLFlow model locally, you can load with _mlflow.pyfunc.load_model()_ from the model's directory and then call its _predict()_ method.
+``` Python
+loaded_model = mlflow.pyfunc.load_model(
+    model_uri = model_info.model_uri
+)
+```
+2. To run in a cloud environment like Azure Machine Learning workspace, you can register your MLFlow model in workspace's model registry.
+![phi3_mlflow_registration](/images/phi3_aml_registry.png)
+3. 
