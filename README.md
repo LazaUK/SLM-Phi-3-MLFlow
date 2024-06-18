@@ -71,7 +71,7 @@ class Phi3Model(mlflow.pyfunc.PythonModel):
 
         return self.tokenizer.decode(response[0][len(self.params.input_ids):])
 ```
-3. The last step is to generate a custom Python wrapper (in pickle format) for the Phi-3 model, along with the original ONNX model and required dependencies:
+3. You can use now _mlflow.pyfunc.log_model()_ function to generate a custom Python wrapper (in pickle format) for the Phi-3 model, along with the original ONNX model and required dependencies:
 ``` Python
 model_info = mlflow.pyfunc.log_model(
     artifact_path = artifact_path,
