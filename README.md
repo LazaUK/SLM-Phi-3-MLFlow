@@ -37,8 +37,7 @@ model_info = mlflow.transformers.log_model(
 ## Option 2: Custom Python wrapper
 
 ## Signatures of generated MLFlow models
-1. In the Step 3 of the Option 1 above, we have set the MLFlow's model task to "_llm/v1/chat_". This instruction generates an API wrapper, compatible with OpenAI's Chat API.
-2. 
+1. In the Step 3 of the Option 1 above, we have set the MLFlow's model task to "_llm/v1/chat_". Such instruction generates model's API wrapper, compatible with OpenAI's Chat API as shown below. 
 ``` Python
 {
 inputs: 
@@ -48,6 +47,18 @@ outputs:
 params: 
   None
 }
+```
+2. As a result, you can submit your prompt in the following format.
+``` Python
+messages = [{"role": "user", "content": "What is the capital of Spain?"}]
+```
+3. Then use OpenAI API-compatible post-processing, e.g. _response[0]['choices'][0]['message']['content']_ to beautify your output to something like this.
+``` JSON
+Question: What is the capital of Spain?
+
+Response: The capital of Spain is Madrid. It is the largest city in Spain and serves as the political, economic, and cultural center of the country. Madrid is located in the center of the Iberian Peninsula and is known for its rich history, art, and architecture, including the Royal Palace, the Prado Museum, and the Plaza Mayor.
+
+Usage: {'prompt_tokens': 11, 'completion_tokens': 73, 'total_tokens': 84}
 ```
 
 ## Inference of Phi-3 with MLFlow runtime
