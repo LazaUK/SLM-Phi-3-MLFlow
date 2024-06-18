@@ -120,7 +120,7 @@ params:
 ``` Python
 {"prompt": "<|system|>You are a stand-up comedian.<|end|><|user|>Tell me a joke about atom<|end|><|assistant|>",}
 ```
-6. The model's output will be provided then in string format.
+6. The model's output will be provided then in string format:
 ``` JSON
 Alright, here's a little atom-related joke for you!
 
@@ -132,15 +132,15 @@ Remember, this is all in good fun, and we're just having a little atomic-level h
 ```
 
 ## Inference of Phi-3 with MLFlow runtime
-1. To run generated MLFlow model locally, you can load with _mlflow.pyfunc.load_model()_ from the model's directory and then call its _predict()_ method.
+1. To run the generated MLFlow model locally, you can load it with _mlflow.pyfunc.load_model()_ from the model’s directory and then call its _predict()_ method. You can load the model as follows:
 ``` Python
 loaded_model = mlflow.pyfunc.load_model(
     model_uri = model_info.model_uri
 )
 ```
-2. To run in a cloud environment like Azure Machine Learning workspace, you can register your MLFlow model with a custom Python wrapper in workspace's model registry.
+2. To run in a cloud environment like an Azure Machine Learning workspace, you can register your MLFlow model with a custom Python wrapper in workspace's model registry:
 ![phi3_mlflow_registration](/images/phi3_aml_registry.png)
-3. Then, deploy it to a managed real-time endpoint.
+3. Then, deploy it to a managed real-time endpoint:
 ![phi3_mlflow_deploy](/images/phi3_aml_deploy.png)
-4. Once the deployment succeed, you can immediately start using it with code samples provided in JavaScript, Python, C# or R.
+4.Once the deployment succeeds, you can immediately start using it with code samples provided in **JavaScript**, **Python**, **C#** or **R**:
 ![phi3_mlflow_endpoint](/images/phi3_aml_endpoint.png)
