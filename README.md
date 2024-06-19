@@ -4,6 +4,8 @@ MLflow is an open-source platform designed to streamline the entire machine lear
 
 In this repo, I’ll demonstrate two different approaches to building a wrapper around Phi-3 small language model (SLM) and then running it as an MLFlow model either locally or in the cloud, e.g., in Azure Machine Learning workspace. You can use attached Jupyter notebooks to jump-start your development process.
 
+> _Note_: this code has been now contributed to Microsoft's Phi-3 Cookbook [here](https://github.com/microsoft/Phi-3CookBook/blob/main/md/06.E2ESamples/E2E_Phi-3-MLflow.md).
+
 ## Table of contents:
 - [Option 1: Transformer pipeline](https://github.com/LazaUK/SLM-Phi-3-MLFlow/tree/main#option-1-transformer-pipeline)
 - [Option 2: Custom Python wrapper](https://github.com/LazaUK/SLM-Phi-3-MLFlow/tree/main#option-2-custom-python-wrapper)
@@ -144,5 +146,3 @@ loaded_model = mlflow.pyfunc.load_model(
 ![phi3_mlflow_deploy](/images/phi3_aml_deploy.png)
 4. Once the deployment succeeds, you can immediately start using it with code samples provided in **JavaScript**, **Python**, **C#** or **R**:
 ![phi3_mlflow_endpoint](/images/phi3_aml_endpoint.png)
-
-> _Note_: this code has been now contributed to Microsoft's Phi-3 Cookbook [here](https://github.com/microsoft/Phi-3CookBook/blob/main/md/06.E2ESamples/E2E_Phi-3-MLflow.md).
